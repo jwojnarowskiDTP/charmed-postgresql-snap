@@ -22,6 +22,7 @@ mkdir -p $SNAP_COMMON/raft
 mkdir -p $SNAP_COMMON/postgresql
 mkdir -p $SNAP_DATA/postgresql
 touch $SNAP_DATA/postgresql/postgresql.conf
+touch $SNAP_DATA/postgresql/pg_ident.conf
 
 cp $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
 cp $SNAP/etc/pgbackrest.conf $SNAP_DATA/etc/pgbackrest
