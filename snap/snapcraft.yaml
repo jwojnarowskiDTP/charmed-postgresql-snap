@@ -182,14 +182,14 @@ apps:
   pgbackrest-service:
     command: start-pgbackrest.sh
     daemon: simple
-    install-mode: enable
+    install-mode: disable
     plugs:
       - network
       - network-bind
   pgbackrest-exporter:
     command: start-pgbackrest-exporter.sh
     daemon: simple
-    install-mode: enable
+    install-mode: disable
     plugs:
       - network
       - network-bind
@@ -205,7 +205,7 @@ apps:
   prometheus-postgres-exporter:
     command: start-exporter.sh
     daemon: simple
-    install-mode: enable
+    install-mode: disable
     plugs:
       - network
       - network-bind
