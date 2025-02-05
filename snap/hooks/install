@@ -2,20 +2,20 @@
 
 VAR_LIB_PGBACKREST=$SNAP_COMMON/var/lib/pgbackrest
 
-install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/patroni
-install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/postgresql
-install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/pgbackrest
-install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/pgbouncer
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/patroni
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/postgresql
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/pgbackrest
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_DATA/etc/pgbouncer
 
-install -d -m 750 -o 584788 -g 0 $VAR_LIB_PGBACKREST
-install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/postgresql.failed
-install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/data/db
+sudo install -d -m 750 -o 584788 -g 0 $VAR_LIB_PGBACKREST
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/postgresql.failed
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/data/db
 
-install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/lib/postgresql
-install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/patroni
-install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/pgbackrest
-install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/pgbouncer
-install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/postgresql
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/lib/postgresql
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/patroni
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/pgbackrest
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/pgbouncer
+sudo install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/postgresql
 
 # hack : patroni_raft_controller cant create
 #mkdir -p $SNAP_COMMON/raft
@@ -24,8 +24,10 @@ install -d -m 750 -o 584788 -g 0 $SNAP_COMMON/var/log/postgresql
 #touch $SNAP_DATA/postgresql/postgresql.conf
 #touch $SNAP_DATA/postgresql/pg_ident.conf
 
-cp $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
-cp $SNAP/etc/pgbackrest.conf $SNAP_DATA/etc/pgbackrest
+# cp $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
+# cp $SNAP/etc/pgbackrest.conf $SNAP_DATA/etc/pgbackrest
+sudo install -m 750 -o 584788 -g 0 $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
+sudo install -m 750 -o 584788 -g 0 $SNAP/etc/pgbackrest.conf $SNAP_DATA/etc/pgbackrest
 
 sed -i "s:/var/lib/pgbackrest:$VAR_LIB_PGBACKREST:g" $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
 echo "pg1-path=$SNAP_COMMON/var/lib/postgresql" >> $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
