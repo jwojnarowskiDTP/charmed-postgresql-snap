@@ -40,5 +40,8 @@ jobs:
         with:
           pattern: ${{ needs.build.outputs.artifact-prefix }}-*
           merge-multiple: true
+      - name: Installation check
+        run: |
+          sudo snap install ./*.snap --dangerous
       - name: Run tests
         run: tox run -e smoke
