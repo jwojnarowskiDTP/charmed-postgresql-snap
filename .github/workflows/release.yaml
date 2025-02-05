@@ -22,7 +22,6 @@ jobs:
 
   release:
     name: Release snap
-    if: false
     needs:
       - build
     uses: canonical/data-platform-workflows/.github/workflows/release_snap.yaml@v29.0.5
