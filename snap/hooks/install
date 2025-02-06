@@ -21,7 +21,7 @@ mkdir -p $SNAP_COMMON/var/log/pgbouncer
 mkdir -p $SNAP_COMMON/var/log/postgresql
 
 # hack : patroni_raft_controller cant create
-mkdir -p $SNAP_COMMON/raft
+#mkdir -p $SNAP_COMMON/raft
 #mkdir -p $SNAP_COMMON/postgresql
 #mkdir -p $SNAP_DATA/postgresql
 
