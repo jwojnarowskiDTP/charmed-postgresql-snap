@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VAR_LIB_PGBACKREST=$SNAP_COMMON/var/lib/pgbackrest
+VAR_LIB_PGBACKREST=$SNAP_USER_COMMON/var/lib/pgbackrest
 INSTALL_CMD=$SNAP/usr/bin/install
 $INSTALL_CMD -d -m 750 $SNAP_DATA/etc/testtest
 echo "testing"
@@ -11,19 +11,19 @@ mkdir -p $SNAP_DATA/etc/pgbackrest
 mkdir -p $SNAP_DATA/etc/pgbouncer
 
 mkdir -p $VAR_LIB_PGBACKREST
-mkdir -p $SNAP_COMMON/postgresql.failed
-mkdir -p $SNAP_COMMON/data/db
+mkdir -p $SNAP_USER_COMMON/postgresql.failed
+mkdir -p $SNAP_USER_COMMON/data/db
 
-mkdir -p $SNAP_COMMON/var/lib/postgresql
-mkdir -p $SNAP_COMMON/var/log/patroni
-mkdir -p $SNAP_COMMON/var/log/pgbackrest
-mkdir -p $SNAP_COMMON/var/log/pgbouncer
-mkdir -p $SNAP_COMMON/var/log/postgresql
+mkdir -p $SNAP_USER_COMMON/var/lib/postgresql
+mkdir -p $SNAP_USER_COMMON/var/log/patroni
+mkdir -p $SNAP_USER_COMMON/var/log/pgbackrest
+mkdir -p $SNAP_USER_COMMON/var/log/pgbouncer
+mkdir -p $SNAP_USER_COMMON/var/log/postgresql
 
 # hack : patroni_raft_controller cant create
-#mkdir -p $SNAP_COMMON/raft
-#mkdir -p $SNAP_COMMON/postgresql
-#mkdir -p $SNAP_DATA/postgresql
+mkdir -p $SNAP_USER_COMMON/raft
+mkdir -p $SNAP_USER_COMMON/postgresql
+mkdir -p $SNAP_DATA/postgresql
 
 #touch $SNAP_DATA/postgresql/postgresql.conf
 #touch $SNAP_DATA/postgresql/pg_ident.conf
@@ -34,13 +34,13 @@ mkdir -p $SNAP_COMMON/var/log/postgresql
 cp $SNAP/etc/pgbackrest.conf $SNAP_DATA/etc/pgbackrest
 
 sed -i "s:/var/lib/pgbackrest:$VAR_LIB_PGBACKREST:g" $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
-echo "pg1-path=$SNAP_COMMON/var/lib/postgresql" >> $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
+echo "pg1-path=$SNAP_USER_COMMON/var/lib/postgresql" >> $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
 echo "pg1-user=snap_daemon" >> $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
 #patroni config done
 
 # hack 
-chmod -R 770 "$SNAP_COMMON"
+chmod -R 770 "$SNAP_USER_COMMON"
 chmod -R 770 "$SNAP_DATA"
 #
-chown -R 584788:root $SNAP_COMMON/*
+chown -R 584788:root $SNAP_USER_COMMON/*
 chown -R 584788:root $SNAP_DATA/*
