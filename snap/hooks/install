@@ -5,7 +5,7 @@ INSTALL_CMD=$SNAP/usr/bin/install
 $INSTALL_CMD -d -m 750 $SNAP_DATA/etc/testtest
 echo "testing"
 ls -lah $SNAP_DATA/etc
-mkdir -p $SNAP_DATA/etc/patroni
+# mkdir -p $SNAP_DATA/etc/patroni
 mkdir -p $SNAP_DATA/etc/postgresql
 mkdir -p $SNAP_DATA/etc/pgbackrest
 mkdir -p $SNAP_DATA/etc/pgbouncer
@@ -24,19 +24,23 @@ mkdir -p $SNAP_COMMON/var/log/postgresql
 mkdir -p $SNAP_COMMON/raft
 #mkdir -p $SNAP_COMMON/postgresql
 #mkdir -p $SNAP_DATA/postgresql
-touch $SNAP_DATA/postgresql/postgresql.conf
-touch $SNAP_DATA/postgresql/pg_ident.conf
 
-cp $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
+#touch $SNAP_DATA/postgresql/postgresql.conf
+#touch $SNAP_DATA/postgresql/pg_ident.conf
+
+#cp $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
+
+# patroni config starts here
 cp $SNAP/etc/pgbackrest.conf $SNAP_DATA/etc/pgbackrest
 
 sed -i "s:/var/lib/pgbackrest:$VAR_LIB_PGBACKREST:g" $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
 echo "pg1-path=$SNAP_COMMON/var/lib/postgresql" >> $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
 echo "pg1-user=snap_daemon" >> $SNAP_DATA/etc/pgbackrest/pgbackrest.conf
+#patroni config done
 
 # hack 
-chmod -R 770 "$SNAP_COMMON"
-chmod -R 770 "$SNAP_DATA"
+#chmod -R 770 "$SNAP_COMMON"
+#chmod -R 770 "$SNAP_DATA"
 #
-chown -R 584788:root $SNAP_COMMON/*
-chown -R 584788:root $SNAP_DATA/*
+#chown -R 584788:root $SNAP_COMMON/*
+#chown -R 584788:root $SNAP_DATA/*
