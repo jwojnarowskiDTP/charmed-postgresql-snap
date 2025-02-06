@@ -5,6 +5,7 @@ export LOCPATH="${SNAP}"/usr/lib/locale
 
 $SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon -- mkdir -p $SNAP_DATA/etc/patroni
 $SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon -- mkdir -p $SNAP_COMMON/postrgresql
+$SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon -- mkdir -p $SNAP_DATA/postrgresql
 ls -la $SNAP_DATA/etc
 
 if [ ! -e $SNAP_DATA/etc/patroni/patroni.yaml ]; then
