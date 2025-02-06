@@ -8,7 +8,7 @@ for dir in "$SNAP_DATA/etc/patroni" "$SNAP_COMMON/postgresql" "$SNAP_DATA/postgr
 done
 
 if [ ! -e $SNAP_DATA/etc/patroni/patroni.yaml ]; then
-  cp $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
+  $SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon -- cp $SNAP/config/patroni.yaml $SNAP_DATA/etc/patroni
 fi
 
 $SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon \
