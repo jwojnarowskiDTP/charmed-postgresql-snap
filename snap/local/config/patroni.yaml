@@ -2,10 +2,9 @@ scope: "charmed-postgresql"
 namespace: "/postgresql-common/"
 name: postgresql
 
-#### deprecated
-#raft:
-#  data_dir: /var/snap/charmed-postgresql/common/raft
-#  self_addr: '127.0.0.1:2222'
+raft:
+  data_dir: /var/snap/charmed-postgresql/common/raft
+  self_addr: '127.0.0.1:2222'
 
 restapi:
   listen: 127.0.0.1:8008
