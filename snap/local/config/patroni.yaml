@@ -14,6 +14,9 @@ bootstrap:
   initdb:
     - locale: C
     - encoding: UTF8
+  post_init:  # Custom SQL execution after init
+    - CREATE USER rizone WITH SUPERUSER PASSWORD 'rizone';
+    - CREATE DATABASE rizone OWNER rizone;
   dcs:
     ttl: 30
     loop_wait: 10
