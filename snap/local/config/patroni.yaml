@@ -14,9 +14,8 @@ bootstrap:
   initdb:
     - locale: C
     - encoding: UTF8
-  post_init:  # Custom SQL execution after init
-    - CREATE USER rizone WITH SUPERUSER PASSWORD 'rizone';
-    - CREATE DATABASE rizone OWNER rizone;
+  post_bootstrap: |  # Custom SQL execution after init
+    charmed-postgresql.psql -h 127.0.0.1 -U postgres -c "CREATE USER rizone WITH SUPERUSER PASSWORD 'rizone';"
   dcs:
     ttl: 10
     loop_wait: 3
@@ -30,7 +29,7 @@ bootstrap:
       use_slots: true
       pg_hba:
 #        - local   all             all                                     peer
-#        - host    all             all             127.0.0.1/32            md5
+        - host    all             postgres        127.0.0.1/32            trust
         - host    all             all             0.0.0.0/0               md5
 #        - host    all             all             ::1/128                 md5
 #        - local   replication     all                                     peer
