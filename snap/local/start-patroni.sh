@@ -21,18 +21,34 @@ fi
 $SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon \
   --regid snap_daemon -- $SNAP/usr/bin/patroni $SNAP_DATA/etc/patroni/patroni.yaml "$@"
 
-#rizone setup database
-while true; do
-    # check leader statuspg_is_in_recovery()
+# rizone setup database
+max_attempts=30
+attempt=0
+while [ $attempt -lt $max_attempts ]; do
+    # check leader status
     result=$(execute_query "SELECT pg_is_in_recovery();")
-    # Sprawdź wynik
     if [ "$result" == "f" ]; then
-        # create database and user
-        execute_query "CREATE ROLE rizone WITH LOGIN PASSWORD 'rizone';"
-        execute_query "CREATE DATABASE rizone OWNER rizone;"
+        # Check if user and database already exist
+        user_exists=$(execute_query "SELECT 1 FROM pg_roles WHERE rolname='rizone';")
+        db_exists=$(execute_query "SELECT 1 FROM pg_database WHERE datname='rizone';")
+
+        if [ "$user_exists" != "1" ]; then
+            execute_query "CREATE ROLE rizone WITH LOGIN PASSWORD 'rizone';" || { echo "Failed to create role rizone"; exit 1; }
+        fi
+
+        if [ "$db_exists" != "1" ]; then
+            execute_query "CREATE DATABASE rizone OWNER rizone;" || { echo "Failed to create database rizone"; exit 1; }
+        fi
+        echo "Database and user setup completed successfully."
         break
     else
         echo "Waiting to postgresql Leader..."
         sleep 10
+        attempt=$((attempt + 1))
     fi
 done
+
+if [ $attempt -eq $max_attempts ]; then
+    echo "Timed out waiting for postgresql Leader."
+    exit 1
+fi
