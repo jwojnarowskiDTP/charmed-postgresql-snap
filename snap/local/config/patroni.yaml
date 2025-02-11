@@ -14,9 +14,7 @@ bootstrap:
   initdb:
     - locale: C
     - encoding: UTF8
-  post_bootstrap: |  # Custom SQL execution after init
-    /snap/bin/charmed-postgresql.psql -h 127.0.0.1 -U postgres -c \
-    "CREATE USER rizone WITH SUPERUSER PASSWORD 'rizone';"
+
   dcs:
     ttl: 10
     loop_wait: 3

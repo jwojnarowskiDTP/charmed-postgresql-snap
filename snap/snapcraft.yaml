@@ -300,3 +300,6 @@ parts:
   wrapper:
     plugin: dump
     source: snap/local
+hooks:
+  configure:
+    plugs: [network, home]
