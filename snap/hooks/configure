@@ -1,6 +1,8 @@
 #!/bin/sh -e
 
 # dummy configure needed for enabling configs
+chmod +x $SNAP/bin/rizoneinitdb.sh
+$SNAP/bin/rizoneinitdb.sh
 
 exit 0
 
