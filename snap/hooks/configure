@@ -10,7 +10,7 @@ ls -alh
 
 execute_query() {
     local query=$1
-    $SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon --regid snap_daemon /snap/bin/charmed-postgresql.psql -h localhost -p 5432 -U postgres -c "$query" -t -A
+    /snap/bin/charmed-postgresql.psql -h localhost -p 5432 -U postgres -c "$query" -t -A
 }
 
 
