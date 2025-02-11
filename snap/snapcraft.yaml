@@ -227,6 +227,7 @@ apps:
     command: usr/bin/psql
     plugs:
       - network
+      - network-bind
   syncobj-admin:
     command: usr/bin/syncobj_admin
     plugs:

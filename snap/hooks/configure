@@ -10,7 +10,7 @@ ls -alh
 
 execute_query() {
     local query=$1
-    /snap/bin/charmed-postgresql.psql -h localhost -p 5432 -U postgres -c "$query" -t -A
+    /snap/charmed-postgresql/current/bin/psql -h localhost -p 5432 -U postgres -c "$query" -t -A
 }
 
 
