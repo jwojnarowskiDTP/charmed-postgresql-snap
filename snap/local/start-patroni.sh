@@ -2,7 +2,7 @@
 
 # For security measures, daemons should not be run as sudo. Execute patroni as the non-sudo user: snap_daemon.
 export LOCPATH="${SNAP}"/usr/lib/locale
-export USER_ID="snap_daemon"
+export USER_ID="584788" # hack - we need to make sure we can run setpriv. Maybe we can create some user instead in context of snap only ?
 $SNAP/usr/bin/setpriv --clear-groups --reuid $USER_ID --regid $USER_ID -- mkdir -p $SNAP_DATA/etc/patroni
 $SNAP/usr/bin/setpriv --clear-groups --reuid $USER_ID --regid $USER_ID -- mkdir -p $SNAP_COMMON/postgresql
 $SNAP/usr/bin/setpriv --clear-groups --reuid $USER_ID --regid $USER_ID -- mkdir -p $SNAP_DATA/postgresql
