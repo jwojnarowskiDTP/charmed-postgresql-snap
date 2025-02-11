@@ -98,8 +98,14 @@ slots:
 apps:
   createdb:
     command: usr/bin/createdb
+    plugs:
+      - network
+      - network-bind
   createuser:
     command: usr/bin/createuser
+    plugs:
+      - network
+      - network-bind
   patroni:
     command: start-patroni.sh
     daemon: simple
@@ -129,6 +135,9 @@ apps:
     command: usr/bin/pg_buildext
   pg-createcluster:
     command: usr/bin/pg_createcluster
+    plugs:
+      - network
+      - network-bind
   pg-dropcluster:
     command: usr/bin/pg_dropcluster
   pg-isready:
