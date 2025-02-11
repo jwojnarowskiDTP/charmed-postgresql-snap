@@ -46,9 +46,9 @@ while [ $attempt -lt $max_attempts ]; do
         sleep 10
         attempt=$((attempt + 1))
     fi
-done
+done &
 
-if [ $attempt -eq $max_attempts ]; then
-    echo "Timed out waiting for postgresql Leader."
-    exit 1
-fi
+# if [ $attempt -eq $max_attempts ]; then
+#     echo "Timed out waiting for postgresql Leader."
+#     exit 1
+# fi
