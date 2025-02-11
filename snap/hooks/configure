@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 echo "RIZONE CONFIGURE HOOK"
 # dummy configure needed for enabling configs
