@@ -16,7 +16,7 @@ bootstrap:
     - encoding: UTF8
 
   dcs:
-    ttl: 10
+    ttl: 5
     loop_wait: 3
     retry_timeout: 3
     maximum_lag_on_failover: 1048576
