@@ -39,10 +39,10 @@ while [ $attempt -lt $max_attempts ]; do
         if [ "$db_exists" != "1" ]; then
             execute_query "CREATE DATABASE rizone OWNER rizone;" || { echo "Failed to create database rizone"; exit 1; }
         fi
-        echo "Database and user setup completed successfully."
+        echo "[RIZONE] Database and user setup completed successfully."
         break
     else
-        echo "Waiting to postgresql Leader..."
+        echo "[RIZONE] Waiting to postgresql Leader..."
         sleep 10
         attempt=$((attempt + 1))
     fi
