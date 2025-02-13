@@ -1,0 +1,88 @@
+# Starter pipeline
+
+trigger:
+- rizone
+
+variables:
+  SNAP_PACKAGE_NAME: 'snap-$(Build.Repository.Name)'
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: BuildSnap
+    jobs:
+      - job: CollectPlatforms
+        displayName: 'Collect platforms for snap'
+        pool:
+          vmImage: 'ubuntu-latest'
+        timeoutInMinutes: 5
+        steps:
+        - script: |
+            pipx install git+https://github.com/canonical/data-platform-workflows@'$(workflowVersion)'
+          displayName: 'Install CLI'
+        - checkout: self
+        - script: |
+            collect-snap-platforms --directory='$(pathToSnapProjectDirectory)'
+          displayName: 'Collect snap platforms to build from snapcraft.yaml'
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              Write-Output "##vso[task.setvariable variable=platforms]$(collect.outputs.platforms)"
+
+      - job: Build
+        displayName: 'Build snap'
+        dependsOn: CollectPlatforms
+        pool:
+          vmImage: $(platform.runner)
+        timeoutInMinutes: 30
+        steps:
+        - script: |
+            pipx install git+https://github.com/canonical/data-platform-workflows@'$(workflowVersion)'
+          displayName: 'Install CLI'
+        - script: |
+            parse-snap-version --revision='$(snapcraftSnapRevision)' --channel='$(snapcraftSnapChannel)' --revision-input-name=snapcraft-snap-revision --channel-input-name=snapcraft-snap-channel
+          displayName: 'Parse snapcraft version inputs'
+        - checkout: self
+        - script: |
+            sudo adduser "$USER" lxd
+            sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- lxd waitready
+            sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- lxd init --auto
+            sudo iptables -F FORWARD
+            sudo iptables -P FORWARD ACCEPT
+            sudo snap install snapcraft --classic $(snapcraftSnapVersion.outputs.install_flag)
+          displayName: 'Set up environment'
+        - script: snap list
+        - script: |
+            sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- snapcraft pack -v --build-for='$(platform.name)'
+          displayName: 'Pack snap'
+        - script: |
+            if ($LASTEXITCODE -ne 0) {
+              cat ~/.local/state/snapcraft/log/*
+            }
+          displayName: 'Snapcraft logs'
+          condition: succeededOrFailed()
+        - script: touch .empty
+        - script: |
+            compute-path-in-artifact '$(pathToSnapProjectDirectory)'
+          displayName: 'Compute path in artifact'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: |
+              $(pathToSnapProjectDirectory)/*.snap
+              .empty
+            ArtifactName: '$(artifactPrefix)-$(pathInArtifact.outputs.path)--platform-$(platform.name)'
+            publishLocation: 'Container'
+
+        - task: UniversalPackages@0
+          inputs:
+            command: 'publish'
+            publishDirectory: '$(Build.SourcesDirectory)/target/snap'
+            feedsToUsePublish: 'internal'
+            vstsFeedPublish: 'RittalRiZone/rizone-library'
+            vstsFeedPackagePublish: '$(SNAP_PACKAGE_NAME)'
+            versionOption: 'custom'
+            versionPublish: '1.$(Build.BuildNumber)'
+            packagePublishDescription: 'snap package'
+          displayName: 'Publish snap package'

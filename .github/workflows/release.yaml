@@ -68,7 +68,7 @@ jobs:
                 --project="RittalRiZone"
                 --scope project
                 --feed charmed-postgresql-snap
-                --name release-snap
+                --name my-first-package
                 --version 0.0.1
                 --description "charmed-postgresql-snap by canonical"
                 --path ./*.snap
