@@ -26,9 +26,12 @@ stages:
             sudo iptables -P FORWARD ACCEPT
             sudo snap install snapcraft --classic $(snapcraftSnapVersion.outputs.install_flag)
             snap list
+          displayName: 'Preparing environment' 
+        - script: |
             sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- snapcraft pack -v
             mkdir -p $(Build.SourcesDirectory)/target/snap
-            mv *.snap $(Build.SourcesDirectory)/target/snap              
+            mv *.snap $(Build.SourcesDirectory)/target/snap         
+          displayName: 'Snapcraft pack'     
         - task: UniversalPackages@0
           inputs:
             command: 'publish'
