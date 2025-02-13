@@ -4,7 +4,7 @@ trigger:
 - rizone
 
 variables:
-  SNAP_PACKAGE_NAME: 'snap-$(Build.Repository.Name)'
+  SNAP_PACKAGE_NAME: 'snap-charmed-postgresql'
 
 pool:
   vmImage: ubuntu-latest
