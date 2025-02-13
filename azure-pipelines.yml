@@ -1,0 +1,41 @@
+# Starter pipeline
+
+trigger:
+- rizone
+
+variables:
+  SNAP_PACKAGE_NAME: 'snap-$(Build.Repository.Name)'
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: BuildSnap
+    jobs:
+      - job: BuildSnap
+        variables:
+          version: $[ stageDependencies.BuildAndVersioning.Versioning.outputs['VersionVariables.version'] ]
+        continueOnError: true # next job starts even if this one fails
+        steps:
+          - script: |
+              sudo apt-get update
+              sudo snap install core22
+              sudo snap install snapcraft --classic
+            displayName: 'Install dependencies'
+          - script: |
+              snapcraft --destructive-mode
+              
+              mkdir -p $(Build.SourcesDirectory)/target/snap
+              mv *.snap $(Build.SourcesDirectory)/target/snap
+            displayName: 'Build Snap Package'
+          - task: UniversalPackages@0
+            inputs:
+              command: 'publish'
+              publishDirectory: '$(Build.SourcesDirectory)/target/snap'
+              feedsToUsePublish: 'internal'
+              vstsFeedPublish: 'RittalRiZone/rizone-library'
+              vstsFeedPackagePublish: '$(SNAP_PACKAGE_NAME)'
+              versionOption: 'custom'
+              versionPublish: '1.$(Build.BuildNumber)'
+              packagePublishDescription: 'snap package'
+            displayName: 'Publish snap package'
