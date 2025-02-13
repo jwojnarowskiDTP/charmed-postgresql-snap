@@ -20,63 +20,6 @@ jobs:
     name: Build snap
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v29.0.5
 
-  release-snap:
-    name: Publish snap to AZURE Devops
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Get workflow version
-        id: workflow-version
-        uses: canonical/get-workflow-version-action@v1
-        with:
-          repository-name: canonical/data-platform-workflows
-          file-name: release_snap.yaml
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install Azure CLI
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Download snap package(s)
-        uses: actions/download-artifact@v4
-        with:
-          name: snap
-      - name: Install CLI
-        run: pipx install git+https://github.com/canonical/data-platform-workflows@'${{ steps.workflow-version.outputs.sha }}'#subdirectory=python/cli
-      - name: Parse snapcraft version inputs
-        id: snapcraft-snap-version
-        run: parse-snap-version --revision='${{ inputs.snapcraft-snap-revision }}' --channel='${{ inputs.snapcraft-snap-channel }}' --revision-input-name=snapcraft-snap-revision --channel-input-name=snapcraft-snap-channel
-      - name: Install snapcraft
-        run: sudo snap install snapcraft --classic ${{ steps.snapcraft-snap-version.outputs.install_flag }}
-      - run: snap list
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Compute path in artifact
-        id: path-in-artifact
-        run: compute-path-in-artifact '${{ inputs.path-to-snap-project-directory }}'
-      - name: Download snap package(s)
-        uses: actions/download-artifact@v4
-        with:
-          pattern: ${{ inputs.artifact-prefix }}-${{ steps.path-in-artifact.outputs.path }}--platform-*
-          merge-multiple: true
-      - name: Azure CLI script
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az artifacts universal publish
-                --organization https://dev.azure.com/dtpdevops/
-                --project="RittalRiZone"
-                --scope project
-                --feed charmed-postgresql-snap
-                --name my-first-package
-                --version 0.0.1
-                --description "charmed-postgresql-snap by canonical"
-                --path ./*.snap
-      - name: Snapcraft logs
-        if: ${{ success() || (failure() && steps.release.outcome == 'failure') }}
-        run: cat ~/.local/state/snapcraft/log/*
-  
-
   # release:
   #   name: Release snap
   #   needs:
