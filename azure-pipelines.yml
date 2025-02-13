@@ -23,7 +23,7 @@ stages:
               sudo snap install snapcraft --classic
             displayName: 'Install dependencies'
           - script: |
-              snapcraft --destructive-mode
+              snapcraft
               
               mkdir -p $(Build.SourcesDirectory)/target/snap
               mv *.snap $(Build.SourcesDirectory)/target/snap
