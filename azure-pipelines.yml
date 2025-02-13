@@ -1,7 +1,9 @@
 # Starter pipeline
 
 trigger:
-- rizone
+  branches:
+    include:
+      - rizone
 
 variables:
   SNAP_PACKAGE_NAME: 'snap-charmed-postgresql'
